@@ -2,7 +2,9 @@
 // Dedicated service module for communicating with the Flask backend
 
 // In development, Vite proxies '/api' to http://127.0.0.1:5000 (configured in vite.config.js)
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
+// In production, fallback directly to Render backend if env var is not injected
+const rawBase = import.meta.env.VITE_API_BASE_URL || (import.meta.env.PROD ? 'https://mandi-cluster.onrender.com' : '');
+const BASE_URL = rawBase.replace(/\/+$/, '');
 
 /**
  * Generic helper to perform GET requests and handle errors cleanly
